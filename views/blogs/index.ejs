@@ -1,0 +1,28 @@
+<% include ../partials/header %>
+
+<div class="container">
+    
+    <header class="jumbotron">
+        <div class="container">
+            <h1>Welcome to BlogSystem!</h1>
+            <p>View our fashion blogs from all over the world</p>
+            <p>
+                <a class="btn btn-primary btn-large" href="/blogs/new">Add new Blog</a>
+            </p>
+        </div>
+    </header>
+    
+    <div class="row text-center" style="display:flex; flex-wrap: wrap;">
+        <% blogs.forEach(function(blog) { %>
+            <div class="col-md-12 col-sm-12">
+                <div class="thumbnail" align="left">
+                    <h4><%= blog.createdTime.toLocaleDateString() %>&nbsp&nbsp
+                    <a href="/blogs/<%= blog._id%>"><%= blog.title %></a>
+                    &nbsp&nbsp---<%= blog.author.username %></h4>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+</div>
+
+<% include ../partials/footer %>
