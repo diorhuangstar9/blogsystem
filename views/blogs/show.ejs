@@ -7,7 +7,40 @@
                 <%= blog.createdTime.toLocaleDateString()%>&nbsp&nbsp<%= blog.author.username%>
             </p>
             <div class="thumbnail">
-                <p><%= blog.content%></p>
+                <p><%- blog.content%></p>
+                <% if(blog.author.id && currentUser && blog.author.id.equals(currentUser._id)) {%>
+                <a class="btn btn-warning" href="/blogs/<%= blog._id%>/edit">Edit</a>
+                <form class="delete-form" action="/blogs/<%= blog._id%>?_method=DELETE" method="POST">
+                    <button class="btn btn-danger">Delete</button>
+                </form>
+                <% }%>
+            </div>
+            <div class="">
+                <div class="text-right">
+                    <a class="btn btn-success" href="/blogs/<%= blog._id%>/comments/new">Add New Comment</a>
+                </div>
+                <hr>
+                <% blog.comments.forEach(function(comment) { %>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <strong><%= comment.author.username%></strong>
+                            <span class="pull-right">10 days ago</span>
+                            <p>
+                               <%= comment.text %>
+                            </p>
+                            <% if(comment.author.id && currentUser && comment.author.id.equals(currentUser._id)) {%>
+                            <a class="btn btn-xs btn-warning" 
+                                href="/blogs/<%= blog._id%>/comments/<%= comment._id%>/edit">
+                                Edit
+                            </a>
+                            <form class="delete-form" action="/campgrounds/<%= blog._id%>/comments/<%= comment._id%>?_method=DELETE" method="POST">
+                                <input type="submit" class="btn btn-xs btn-danger" value="Delete">
+                            </form>
+                            <% }%>
+                        </div>
+                    </div>
+
+                <% }) %>
             </div>
         </div>
     </div>

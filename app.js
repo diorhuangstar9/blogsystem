@@ -5,6 +5,7 @@ var express = require("express"),
     mongoose = require("mongoose"),
     passport = require("passport"),
     flash = require("connect-flash"),
+    methodOverride = require("method-override"),
     localStrategy = require("passport-local");
 
 var Blog = require("./models/blogs");
@@ -12,6 +13,7 @@ var User = require("./models/user");
     
 var indexRoutes = require("./routes/index");
 var blogRoutes = require("./routes/blogs");
+var commentRoutes = require("./routes/comments");
 var imageRoutes = require("./routes/images");
 var url = process.env.DATABASEURL || "mongodb://localhost:27017/blog_system";
 mongoose.connect(url,{ useNewUrlParser: true });
@@ -19,6 +21,7 @@ mongoose.connect(url,{ useNewUrlParser: true });
 // seedDB();
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/node_modules/tinymce"));
+app.use(express.static(__dirname + "/public"));
 app.use("/uploads", express.static("uploads"));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(expressSanitizer());
@@ -36,17 +39,15 @@ passport.deserializeUser(User.deserializeUser());
 app.use(function(req, res, next) {
    res.locals.currentUser = req.user;
    res.locals.error = req.flash("error");
-   console.log("error");
-   console.log(res.locals.error);
    res.locals.success = req.flash("success");
-   console.log("success");
-   console.log(res.locals.success);
    next();
 });
+app.use(methodOverride("_method"));
 
 app.use(indexRoutes);
 app.use("/blogs", blogRoutes);
 app.use("/images", imageRoutes);
+app.use("/blogs/:id/comments", commentRoutes);
 
 var userData = {username:"diorhuang", password:"12345"};
 var blogData = [

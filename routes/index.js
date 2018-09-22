@@ -58,8 +58,6 @@ function validateCaptcha(req,res,next) {
         return next();
     req.flash("error", "wrong captcha");
     res.redirect("/register?username="+req.body.username);
-    // res.render("register", {user:
-    //      { username:req.body.username, captcha:req.body.captcha }});
 }
 
 module.exports = router;
